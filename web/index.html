@@ -104,9 +104,15 @@
                             '</div>';
                           }
                         },
-                        onChange: function(value) {
-                            var iframe = document.getElementById("viz-frame");
-                            iframe.src = value; // assuming the option value matches the iframe src
+                        //onChange: function(value) {
+                        //    var iframe = document.getElementById("viz-frame");
+                        //    iframe.src = value; // assuming the option value matches the iframe src
+                        //},
+                        onItemAdd: function(value) {
+                            var iframe = document.getElementById('viz-frame');
+                            if (value) {
+                                iframe.src = value; // assuming the option value matches the iframe src
+                            }
                         }
                       });
                     </script> 
