@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>SCRAPEABLE - FINQUERY</title>
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.default.css" integrity="sha512-J0JTRxsBEJ99DP4GamwciDi8VjALSrZneBYrv98BhqHPvlQP6gLbmmuddlYXHDB8hyLtefOIJFlpZBhksCtK8g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js" integrity="sha512-pF+DNRwavWMukUv/LyzDyDMn8U2uvqYQdJN0Zvilr6DDo/56xPDZdDoyPDYZRSL4aOKO/FGKXTpzDyQJ8je8Qw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.bootstrap4.min.css" integrity="sha512-MMojOrCQrqLg4Iarid2YMYyZ7pzjPeXKRvhW9nZqLo6kPBBTuvNET9DBVWptAo/Q20Fy11EIHM5ig4WlIrJfQw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <style>
+          .selectize-dropdown-content {
+            max-height: 400px; /* Change this value to adjust the height of the menu */
+          }
+        </style>
+
+    </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <!-- Navbar Brand-->
+            <a class="navbar-brand ps-3" href="index.html">FINQUERY</a>
+            <!-- Sidebar Toggle-->
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            <!-- Navbar Search-->
+            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"></form>
+            <div class="input-group mb-3" style="padding-top: 16px; padding-right: 2px; padding-left: 2px; width: 70%;">
+              <select id="selectinput" style="width: 75%; border-radius: 25px;" placeholder="Select a financial dataset to visualize..." class="form-control" aria-describedby="submit"></select>
+              <button class="btn btn-outline-secondary" type="button" id="submit">Search</button>
+            </div>
+            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"></form> 
+            <!-- Navbar-->
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#!">Settings</a></li>
+                        <li><a class="dropdown-item" href="#!">Logout</a></li>
+                        <p style="font-size:10px; margin: 5px;">these don't do things...</p>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <!-- <div class="sb-sidenav-menu-heading">Core</div> -->
+                            <a class="nav-link" href="index.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-line"></i></div>
+                                Search
+                            </a>
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="sb-sidenav-footer">
+                        FINQUERY <small>by scrapeable</small>
+                    </div>
+                </nav>
+            </div>
+            <div id="layoutSidenav_content">
+              <main>
+                <div class="container-fluid px-4">
+                  <div class="input-group mb-3">
+                    <!-- <select id="selectinput" style="width: 85%; border-radius: 25px;" placeholder="Visualize information about companies" class="form-control" aria-describedby="submit"></select>
+                    <button class="btn btn-outline-secondary" type="button" id="submit">Search</button> -->
+                    <script>
+                    $("#selectinput").selectize({
+                      valueField: "value",
+                      labelField: "label",
+                      searchField: ["pub_id", "id_short_name", "id_long_name", "dataset_long_name", "visual_long_name"],
+                      maxOptions: 12,
+                      maxItems: 1,
+                      create: false,
+                      options: [
+                        {pub_id: 1, id_short_name: 'AAPL', id_long_name: 'APPLE INC.', dataset_long_name: 'FILINGS', visual_long_name: ['TIMESERIES', 'PIECHART', 'SCATTERPLOT', 'HISTOGRAM'], label: 'AAPL F TS', value: 'https://us-east-2.quicksight.aws.amazon.com/sn/embed/share/accounts/498443533345/dashboards/e662622f-7c69-4675-880b-f1201bcb04da/sheets/e662622f-7c69-4675-880b-f1201bcb04da_fffe4dc6-02af-4d9a-94d5-eb1106be9887/visuals/e662622f-7c69-4675-880b-f1201bcb04da_3f50f376-8caf-4671-94e1-070d5e14ecf8?directory_alias=scrapeable-author#p.id1=AAPL'},
+                        {pub_id: 6, id_short_name: 'AAPL', id_long_name: 'Apple Inc.', dataset_long_name: 'REPORTED BALANCESHEET', visual_long_name: 'PIECHART', label: 'AAPL F TS', value: 'AAPL'},
+                        {pub_id: 7, id_short_name: 'AAPL', id_long_name: 'Apple Inc.', dataset_long_name: 'FILINGS', visual_long_name: 'SCATTERPLOT', label: 'AAPL F TS', value: 'AAPL'},
+                        {pub_id: 8, id_short_name: 'AAPL', id_long_name: 'Apple Inc.', dataset_long_name: 'FILINGS', visual_long_name: 'BARCHART', label: 'AAPL F BC', value: 'AAPL'},
+                        {pub_id: 9, id_short_name: 'AAPL', id_long_name: 'Apple Inc.', dataset_long_name: 'FILINGS', visual_long_name: 'HISTOGRAM', label: 'AAPL F HIST', value: 'AAPL'},
+                        {pub_id: 2, id_short_name: 'GOOG', id_long_name: 'Alphabet Inc.', dataset_long_name: 'FILINGS', visual_long_name: 'TIMESERIES', label: 'GOOG F TS', value: 'https://us-east-2.quicksight.aws.amazon.com/sn/embed/share/accounts/498443533345/dashboards/e662622f-7c69-4675-880b-f1201bcb04da/sheets/e662622f-7c69-4675-880b-f1201bcb04da_fffe4dc6-02af-4d9a-94d5-eb1106be9887/visuals/e662622f-7c69-4675-880b-f1201bcb04da_3f50f376-8caf-4671-94e1-070d5e14ecf8?directory_alias=scrapeable-author#p.id1=GOOG'},
+                        {pub_id: 3, id_short_name: 'NFLX', id_long_name: 'Netflix Inc.', dataset_long_name: 'FILINGS', visual_long_name: 'TIMESERIES', label: 'NFLX F TS', value: 'https://us-east-2.quicksight.aws.amazon.com/sn/embed/share/accounts/498443533345/dashboards/e662622f-7c69-4675-880b-f1201bcb04da/sheets/e662622f-7c69-4675-880b-f1201bcb04da_fffe4dc6-02af-4d9a-94d5-eb1106be9887/visuals/e662622f-7c69-4675-880b-f1201bcb04da_3f50f376-8caf-4671-94e1-070d5e14ecf8?directory_alias=scrapeable-author#p.id1=NFLX'},
+                        {pub_id: 4, id_short_name: 'AMZN', id_long_name: 'Amazon Inc.',  dataset_long_name: 'FILINGS', visual_long_name: 'TIMESERIES', label: 'AMZN F TS', value: 'https://us-east-2.quicksight.aws.amazon.com/sn/embed/share/accounts/498443533345/dashboards/e662622f-7c69-4675-880b-f1201bcb04da/sheets/e662622f-7c69-4675-880b-f1201bcb04da_fffe4dc6-02af-4d9a-94d5-eb1106be9887/visuals/e662622f-7c69-4675-880b-f1201bcb04da_3f50f376-8caf-4671-94e1-070d5e14ecf8?directory_alias=scrapeable-author#p.id1=AMZN'},
+                        {pub_id: 10, id_short_name: 'REGN', id_long_name: 'Regeneron Sciences.', dataset_long_name: 'FILINGS', visual_long_name: 'TIMESERIES', label: 'REGN F TS', value: 'https://us-east-2.quicksight.aws.amazon.com/sn/embed/share/accounts/498443533345/dashboards/e662622f-7c69-4675-880b-f1201bcb04da/sheets/e662622f-7c69-4675-880b-f1201bcb04da_fffe4dc6-02af-4d9a-94d5-eb1106be9887/visuals/e662622f-7c69-4675-880b-f1201bcb04da_3f50f376-8caf-4671-94e1-070d5e14ecf8?directory_alias=scrapeable-author#p.id1=REGN'},
+                        {pub_id: 11, id_short_name: 'ALXN', id_long_name: 'Alexion Sciences.', dataset_long_name: 'FILINGS', visual_long_name: 'TIMESERIES', label: 'ALXN F TS', value: 'https://us-east-2.quicksight.aws.amazon.com/sn/embed/share/accounts/498443533345/dashboards/e662622f-7c69-4675-880b-f1201bcb04da/sheets/e662622f-7c69-4675-880b-f1201bcb04da_fffe4dc6-02af-4d9a-94d5-eb1106be9887/visuals/e662622f-7c69-4675-880b-f1201bcb04da_3f50f376-8caf-4671-94e1-070d5e14ecf8?directory_alias=scrapeable-author#p.id1=ALXN'},
+                        {pub_id: 12, id_short_name: 'T', id_long_name: 'At&T.', dataset_long_name: 'FILINGS', visual_long_name: 'TIMESERIES', label: 'T F TS', value: 'T'},
+                        {pub_id: 13, id_short_name: 'F', id_long_name: 'Ford Motors.', dataset_long_name: 'FILINGS', visual_long_name: 'TIMESERIES', label: 'F F TS', value: 'F'},
+                        {pub_id: 14, id_short_name: 'JPM', id_long_name: 'JP Morgan.', dataset_long_name: 'FILINGS', visual_long_name: 'TIMESERIES', label: 'JPM F TS', value: 'JPM'}
+                      ],
+                      create: false,
+                      render: {
+                        option: function(item, escape) {
+                          return '<div class="option">' +
+                            // '<div style="font-size: 12px;">' + 'EQ:' + '</div>' + '&nbsp;' +
+                            '<div class="column" style="width: 40%;">' + '<b>' + escape(item.id_short_name) + '</b>' + '&nbsp;' + '(' + '<small>' + escape(item.id_long_name) + '</small>' + ')' + '</div>' +
+                            '<div class="column" style="width: 60%;">' + '<b>' + escape(item.dataset_short_name) + '</b>' + '&nbsp;' + '(' + '<small>' + escape(item.dataset_long_name) + '</small>' + ')' + '</div>' +
+                            '<div class="column" style="width: 10%;">' + '<b>' + escape(item.visual_short_name) + '</b>' + '&nbsp;' + '(' + '<small>' + escape(item.visual_long_name) + '</small>' + ')' + '</div>' + 
+                            '</div>';
+                          }
+                        },
+                        onChange: function(value) {
+                            var iframe = document.getElementById("viz-frame");
+                            iframe.src = value; // assuming the option value matches the iframe src
+                        }
+                      });
+                    </script> 
+                  </div>
+                  <!-- https://getbootstrap.com/docs/4.1/components/dropdowns/ -->
+                  <div class="input-group mb-3" style="align-content: center;">
+                    <a class="nav-link dropdown-toggle" style="width: 25%; border:1px solid grey; color: gray; text-align: center;" id="visualDropdown" role="button" data-bs-toggle="dropdown"><i class="fas fa-table"></i>Visual</a>
+                    <ul class="dropdown-menu dropdown-menu-end" style="width: 40%;">
+                      <p style="text-align: center;">no inputs available</p>
+                    </ul>                    
+                      <a class="nav-link dropdown-toggle" style="width: 25%; border:1px solid grey; color: gray; text-align: center;" id="datafilterDropdown" role="button" data-bs-toggle="dropdown"><i class="fas fa-filter"></i>Data Filter</a>
+                      <ul class="dropdown-menu dropdown-menu-end" style="width: 40%;">
+                        <p style="text-align: center;">no inputs available</p>
+                      </ul>
+                      <a class="nav-link dropdown-toggle" style="width: 25%; border:1px solid grey; color: gray; text-align: center;" id="aggregateDropdown" role="button" data-bs-toggle="dropdown"><i class="fas fa-up-down"></i>Aggregate</a>
+                      <ul class="dropdown-menu dropdown-menu-end" style="width: 40%;">
+                        <p style="text-align: center;">no inputs available</p>
+                      </ul>
+                      <a class="nav-link dropdown-toggle" style="width: 25%; border:1px solid grey; color: gray; text-align: center;" id="measureDropdown" role="button" data-bs-toggle="dropdown"><i class="fas fa-plus"></i>Add Measure</a>
+                      <ul class="dropdown-menu dropdown-menu-end" style="width: 40%;">
+                        <p style="text-align: center;">no inputs available</p>
+                      </ul>                                            
+                    </div>                                            
+                      <hr>
+                        <div class="iframe-container">
+                          <iframe id="viz-frame" src="https://www.example.com"></iframe>
+                        </div>
+                    </div>
+                </div>                
+              </main>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="js/scripts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+    </body>
+</html>
