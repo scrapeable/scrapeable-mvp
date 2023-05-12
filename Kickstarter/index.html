@@ -321,7 +321,7 @@
         $.getJSON("https://raw.githubusercontent.com/scrapeable/scrapeable-mvp/main/index.json", function(data) {
 
           var options = JSON.parse(data).map(function(item) {
-            return { id_short_name: item.id_short_name, id_long_name: item.id_long_name, dataset_short_name: item.dataset_short_name, dataset_long_name: item.dataset_long_name, visual_short_name: item.visual_short_name, visual_long_name: item.visual_long_name, pub_id: item.pub_id};
+            return { id: item.id, id_name: item.id_name, dataset_short_name: item.dataset_short_name, dataset_long_name: item.dataset_long_name, visual_short_name: item.visual_short_name, visual_long_name: item.visual_long_name, value: item.value, command: item.command};
           });
 
           console.log(options);
