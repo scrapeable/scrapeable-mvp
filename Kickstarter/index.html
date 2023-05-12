@@ -327,9 +327,9 @@
           console.log(options);
 
           $("#selectize").selectize({
-            valueField: "pub_id",
-            labelField: "pub_id",
-            searchField: ["id_short_name", "id_long_name", "dataset_short_name", "dataset_long_name", "visual_short_name", "visual_long_name"],
+            valueField: "value",
+            labelField: "command",
+            searchField: ["id", "id_name", "dataset_short_name", "dataset_long_name", "visual_short_name", "visual_long_name"],
             maxOptions: 12,
             maxItems: 1,
             create: false,
@@ -338,7 +338,7 @@
             render: {
               option: function(item, escape) {
                 return '<div class="option">' +
-                  '<div class="column" style="width: 40%;">' + '<b>' + escape(item.id_short_name) + '</b>' + '&nbsp;' + '(' + '<small>' + escape(item.id_long_name) + '</small>' + ')' + '</div>' +
+                  '<div class="column" style="width: 40%;">' + '<b>' + escape(item.id) + '</b>' + '&nbsp;' + '(' + '<small>' + escape(item.id_name) + '</small>' + ')' + '</div>' +
                   '<div class="column" style="width: 60%;">' + '<b>' + escape(item.dataset_short_name) + '</b>' + '&nbsp;' + '(' + '<small>' + escape(item.dataset_long_name) + '</small>' + ')' + '</div>' +
                   '<div class="column" style="width: 10%;">' + '<b>' + escape(item.visual_short_name) + '</b>' + '&nbsp;' + '(' + '<small>' + escape(item.visual_long_name) + '</small>' + ')' + '</div>' + 
                   '</div>';
