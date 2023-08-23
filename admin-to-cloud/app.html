@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="../../dist/img/icons8-s-67.png">
+  <title>SCRAPEABLE</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+
+  <style>
+    /* .iframe-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding-top: 10vh;
+    }
+    .iframe-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 80vh;
+      border: none;
+    } */
+    .selectize-dropdown .option {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 10px;
+      
+    }
+    .selectize-dropdown .column-l {
+      flex: 1;
+      text-align: left;
+      width: 40;
+    }
+    .selectize-dropdown .column-r {
+      flex: 1;
+      text-align: left;
+      width: 20%;
+    }
+    .selectize-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px;
+      background-color: #eee;
+      font-weight: bold;
+    }
+    .selectize-dropdown-content {
+      max-height: 500px !important; /* Change this value to adjust the height of the menu */
+    }
+    .iframe-container {
+      position: relative;
+      overflow: hidden;
+    }
+    #viz-frame {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      /* width: 100%;
+      height: 100%; */
+      width: 100%; 
+      height: calc(100vh - 90px);
+      border: none;
+    }
+  </style>
+
+</head>
+<body class="hold-transition sidebar-mini sidebar-collapse" style="overflow: hidden !important;">
+<!-- Site wrapper -->
+<div class="wrapper">
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+
+    <div class="input-group mb-3">
+      <!-- <div class="input-group-prepend">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+          Focus
+        </button>
+        <div class="dropdown-menu">
+          <b style="padding-left: 15px; padding-top: 5px;"><u>Finance</u></b>
+          <a class="dropdown-item" href="#">All</a>
+          <a class="dropdown-item" href="#">Equity</a>
+          <a class="dropdown-item" href="#">Institution</a>
+          <a class="dropdown-item" href="#">ETF</a>
+          <a class="dropdown-item" href="#">Economic</a>
+          <a class="dropdown-item" href="#">Bond</a>
+          <a class="dropdown-item" href="#">Crypto</a>
+          <a class="dropdown-item" href="#">Individual</a>
+          <a class="dropdown-item" href="#">Private Equity</a>
+        </div>
+      </div> -->
+      <!-- /btn-group -->
+      <select id="selectize" placeholder="Start typing a ticker, economic code, politician name, dataset......" class="form-control" autocapitalize="on" autocomplete="off" autocorrect="off" role="combobox" spellcheck="false"  type="search"></select>
+      <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default">
+        Sign In
+      </button>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+            <i class="fas fa-expand-arrows-alt"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- /.navbar -->
+
+  <div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">About</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h5 class="modal-title">Build</h5>
+          <p>dashboards, visuals, and custom datasets when you sign up to become and Author.</p>
+          <h5 class="modal-title">Q</h5>
+          <p>allows you to type plain text questions against datasets and outputs visuals.</p>
+          <h5 class="modal-title">Subscriptions</h5>
+          <p>Reader - </p>
+        </div>
+        
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="#" class="brand-link">
+      <img src="../../dist/img/icons8-s-67.png" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light"><b>SCRAPEABLE</b></span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user (optional) -->
+      <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+          <a href="#" class="d-block">BETA USER</a>
+        </div>
+      </div> -->
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-header">Get Started</li>
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-users"></i>
+              <p>
+                Sign Up
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="https://buy.stripe.com/8wMdR23cQ5C95kk6ot" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Reader
+                    <span class="right badge badge-success">$7/month</span>
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="https://buy.stripe.com/8wM7sE9Be0hP5kk3cd" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Reader + Q
+                    <span class="right badge badge-success">$20/month</span>
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="https://buy.stripe.com/aEUdR2dRufcJfYY8wA" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Author
+                    <span class="right badge badge-success">$30/month</span>
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="https://buy.stripe.com/7sI14geVy7KhcMM7sv" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Author + Q
+                    <span class="right badge badge-success">$50/month</span>
+                  </p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="https://us-east-2.quicksight.aws.amazon.com/sn/folders/personal/a625931d-8348-4588-aed9-31ff55064a7e" class="nav-link">
+              <i class="nav-icon fas fa-chart-pie"></i>
+              <p>
+                Build
+                <span class="right badge badge-primary">Author Only</span>
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="https://scrapeable.slack.com" class="nav-link">
+              <i class="nav-icon fas fa-comments"></i>
+              <p>Slack</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="https://help.getslick.com/en/articles/2778757-how-to-turn-off-autofill-drop-down-menu-in-search-on-chrome" class="nav-link">
+              <i class="nav-icon fas fa-tree"></i>
+              <p>
+                Autofill
+                <span class="right badge badge-danger">Bug - Solution</span>
+              </p>
+            </a>
+          </li>
+          <li class="nav-header">Dashboards</li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-globe"></i>
+              <p>
+                Overview
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Equities
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Economics
+                  </p>
+                </a>
+              </li>
+            </ul>
+          </li>
+         </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper" style="overflow-y: hidden !important; overflow-x: hidden !important;">
+    <div class="btn-group" style="padding-left: 0vw;">
+      <button type="button" class="btn btn-primary btn-sm" data-difference="5D">5D</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="WTD">WTD</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="MTD">MTD</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="1M">1M</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="3M">3M</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="6M">6M</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="9M">9M</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="YTD">YTD</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="1Y">1Y</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="3Y">3Y</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="5Y">5Y</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="10Y">10Y</button>
+    </div>
+    <div class="iframe-container">
+      <iframe id="viz-frame"></iframe>
+    </div>
+    <!-- Content Header (Page header) -->
+    <!-- Main content -->
+    <!-- <section class="content" style="padding: 0px !important; width: 100% !important; height: 100% !important; overflow: hidden !important;">
+      <div class="container-fluid" style="width: calc(100vw - 80px) !important; height: calc(100vh - 90px) !important; padding-right: 0 !important; padding-left: 0 !important; overflow: hidden !important; ">
+        <div class="row">
+          <div class="col-12">
+            <div class="iframe-container">
+              <iframe id="viz-frame"  ></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> -->
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- <footer class="main-footer">
+    <strong>SCRAPEABLE Copyright &copy; 2020-2023.</strong> All rights reserved.
+  </footer> -->
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script src="plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/adminlte.min.js"></script>
+<!-- Selectize Links -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.default.css" integrity="sha512-J0JTRxsBEJ99DP4GamwciDi8VjALSrZneBYrv98BhqHPvlQP6gLbmmuddlYXHDB8hyLtefOIJFlpZBhksCtK8g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js" integrity="sha512-pF+DNRwavWMukUv/LyzDyDMn8U2uvqYQdJN0Zvilr6DDo/56xPDZdDoyPDYZRSL4aOKO/FGKXTpzDyQJ8je8Qw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.bootstrap4.min.css" integrity="sha512-MMojOrCQrqLg4Iarid2YMYyZ7pzjPeXKRvhW9nZqLo6kPBBTuvNET9DBVWptAo/Q20Fy11EIHM5ig4WlIrJfQw==" crossorigin="anonymous" referrerpolicy="no-referrer" /> 
+
+<script>
+  $(document).ready(function() {
+    $.getJSON("https://raw.githubusercontent.com/scrapeable/scrapeable-mvp/main/index.json", function(data) {
+
+      var options = JSON.parse(data).map(function(item) {
+        return { 
+          id: item.id, 
+          id_name: item.id_name,
+           dataset_short_name: item.dataset_short_name, 
+           dataset_long_name: item.dataset_long_name, 
+           visual_short_name: item.visual_short_name, 
+           visual_long_name: item.visual_long_name, 
+           value: item.value,
+           command: item.command
+          };
+      });
+
+      // console.log(options);
+
+      $("#selectize").selectize({
+        valueField: "value",
+        labelField: "command",
+        searchField: ["id", "id_name", "dataset_short_name", "dataset_long_name", "visual_short_name", "visual_long_name"],
+        maxOptions: 14,
+        maxItems: 1,
+        create: false,
+        options: options,
+        plugins: ["autofill_disable"],
+        render: {
+          option: function(item, escape) {
+            return '<div class="option">' +
+              '<div class="column-l">' + '<b>' + escape(item.id) + '</b>' + ' - ' + '<small>' + escape(item.id_name) + '</small>' + '</div>' +
+              '<div class="column-l">' + '<b>' + escape(item.dataset_short_name) + '</b>' + ' - ' + '<small>' + escape(item.dataset_long_name) + '</small>' + '</div>' +
+              '<div class="column-r">' + '<b>' + escape(item.visual_short_name) + '</b>' + ' - ' + '<small>' + escape(item.visual_long_name) + '</small>' + '</div>' + 
+              '</div>';
+            }
+          },
+          onItemAdd: function(value) {
+              var iframe = document.getElementById('viz-frame');
+              if (value) {
+                  iframe.src = value; // assuming the option value matches the iframe src
+              }
+          }
+        });
+
+        });
+      });
+</script>
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get the button group
+    const buttonGroup = document.querySelector('.btn-group');
+
+    // Add click event listener to the button group
+    buttonGroup.addEventListener('click', function(event) {
+      const target = event.target;
+      if (target.tagName === 'BUTTON') {
+        // Remove the "active" class from the previously selected button
+        const previousActiveButton = buttonGroup.querySelector('.active');
+        if (previousActiveButton) {
+          previousActiveButton.classList.remove('active');
+        }
+
+        // Add the "active" class to the newly selected button
+        target.classList.add('active');
+
+        // Rest of your logic to handle the selected button
+        const difference = target.dataset.difference;
+        const startDate = calculateStartDate(difference);
+        if (startDate) {
+          // console.log(startDate);
+        }
+      }
+    });
+
+    // Set the default active button (1Y)
+    const defaultActiveButton = buttonGroup.querySelector('[data-difference="1Y"]');
+    defaultActiveButton.classList.add('active');
+  });
+
+  // Function to calculate the start date based on the difference
+  function calculateStartDate(difference) {
+    const currentDate = new Date();
+    let startDate;
+    
+    if (difference === 'WTD') {
+      startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 1);
+    } else if (difference === 'MTD') {
+      startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    } else if (difference === 'YTD') {
+      startDate = new Date(currentDate.getFullYear(), 0, 1);
+    } else {
+      const value = parseInt(difference);
+      if (!isNaN(value)) {
+        let timeInMillis;
+        
+        if (difference.endsWith('D')) {
+          timeInMillis = value * 24 * 60 * 60 * 1000;
+        } else if (difference.endsWith('M')) {
+          timeInMillis = value * 30 * 24 * 60 * 60 * 1000;
+        } else if (difference.endsWith('Y')) {
+          timeInMillis = value * 365 * 24 * 60 * 60 * 1000;
+        } else {
+          // Handle invalid difference values
+          console.log('Invalid difference value');
+          return;
+        }
+        
+        startDate = new Date(currentDate.getTime() - timeInMillis);
+      } else {
+        // Handle invalid difference values
+        console.log('Invalid difference value');
+        return;
+      }
+    }
+    
+    return startDate.toISOString().split('T')[0];
+  }
+  
+  // Get the button group
+  const buttonGroup = document.querySelector('.btn-group');
+  
+  // Add click event listener to the button group
+  buttonGroup.addEventListener('click', function(event) {
+    const target = event.target;
+    if (target.tagName === 'BUTTON') {
+      const difference = target.dataset.difference;
+      const startDate = calculateStartDate(difference);
+      if (startDate) {
+        // Log the startDate to the console
+        // console.log(startDate);
+      }
+    }
+  });
+  
+  // Set default value for startDate when the webpage loads
+  const defaultDifference = '1Y';
+  const defaultStartDate = calculateStartDate(defaultDifference);
+  if (defaultStartDate) {
+    console.log(defaultStartDate);
+  }
+</script>
+
+</body>
+</html>

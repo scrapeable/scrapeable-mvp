@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="../../dist/img/icons8-s-67.png">
+  <title>SCRAPEABLE</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+
+  <!-- jQuery -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4 -->
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="dist/js/adminlte.min.js"></script>
+  <!-- tradingview -->
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <!-- Selectize Links -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.default.css" integrity="sha512-J0JTRxsBEJ99DP4GamwciDi8VjALSrZneBYrv98BhqHPvlQP6gLbmmuddlYXHDB8hyLtefOIJFlpZBhksCtK8g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js" integrity="sha512-pF+DNRwavWMukUv/LyzDyDMn8U2uvqYQdJN0Zvilr6DDo/56xPDZdDoyPDYZRSL4aOKO/FGKXTpzDyQJ8je8Qw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.bootstrap4.min.css" integrity="sha512-MMojOrCQrqLg4Iarid2YMYyZ7pzjPeXKRvhW9nZqLo6kPBBTuvNET9DBVWptAo/Q20Fy11EIHM5ig4WlIrJfQw==" crossorigin="anonymous" referrerpolicy="no-referrer" /> 
+  <!-- main.js -->
+  <script src="dist/js/main.js"></script>
+
+
+  <style>
+    .selectize-dropdown .option {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 10px;
+      
+    }
+    .selectize-dropdown .column-l {
+      flex: 1;
+      text-align: left;
+      width: 40;
+    }
+    .selectize-dropdown .column-r {
+      flex: 1;
+      text-align: left;
+      width: 20%;
+    }
+    .selectize-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px;
+      background-color: #eee;
+      font-weight: bold;
+    }
+    .selectize-dropdown-content {
+      max-height: 500px !important; /* Change this value to adjust the height of the menu */
+    }
+    .iframe-container {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      height: 100vh;
+    }
+    #viz-frame {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      width: 100%; 
+      height: calc(100vh - 100px);
+      border: none;
+    }
+  </style>
+
+</head>
+<body class="hold-transition sidebar-mini sidebar-collapse" style="overflow: hidden !important;">
+<!-- Site wrapper -->
+<div class="wrapper">
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <div class="input-group mb-3">
+      <select id="selectize" placeholder="Start typing a ticker, economic code, politician name, dataset......" class="form-control" autocapitalize="on" autocomplete="off" autocorrect="off" role="combobox" spellcheck="false"  type="search"></select>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+            <i class="fas fa-expand-arrows-alt"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- /.navbar -->
+
+  <div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">About</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="#" class="brand-link">
+      <img src="../../dist/img/icons8-s-67.png" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light"><b>SCRAPEABLE</b></span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-header">Get Started</li>
+          <li class="nav-item">
+            <a href="https://us-east-2.quicksight.aws.amazon.com/sn/folders/personal/a625931d-8348-4588-aed9-31ff55064a7e" class="nav-link">
+              <i class="nav-icon fas fa-chart-pie"></i>
+              <p>
+                Build
+                <span class="right badge badge-primary">Author Only</span>
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-comments"></i>
+              <p>
+                Help
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Contact
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Slack
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Autofill
+                    <span class="right badge badge-danger">Bug - Solution</span>
+                  </p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-header">Dashboards</li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-globe"></i>
+              <p>
+                Overview
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Equities
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Economics
+                  </p>
+                </a>
+              </li>
+            </ul>
+          </li>
+         </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper" style="overflow-y: hidden !important; overflow-x: hidden !important;">
+    <div class="btn-group" style="padding-left: 0vw;">
+      <button type="button" class="btn btn-primary btn-sm" data-difference="5D">5D</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="WTD">WTD</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="MTD">MTD</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="1M">1M</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="3M">3M</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="6M">6M</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="9M">9M</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="YTD">YTD</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="1Y">1Y</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="3Y">3Y</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="5Y">5Y</button>
+      <button type="button" class="btn btn-primary btn-sm" data-difference="10Y">10Y</button>
+    </div>
+
+    <div class="iframe-container" id="container-viz-frame">
+      <iframe id="viz-frame"></iframe>
+    </div>
+
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+</body>
+
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+     <!--handsontable  -->
+    <link href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
+
+    <!-- arquero -->
+    <script src="https://cdn.jsdelivr.net/npm/apache-arrow@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/arquero@latest"></script>
+
+    <style>
+      /* width */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      
+      /* Track */
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+      }
+       
+      /* Handle */
+      ::-webkit-scrollbar-thumb {
+        background: #888; 
+      }
+      
+      /* Handle on hover */
+      ::-webkit-scrollbar-thumb:hover {
+        background: #555; 
+      }
+      </style>
+
+</head>
+<body>
+    <!-- Your table container -->
+    <div class="example-table-container" style="width: 100%; height: 600px !important;">
+      <div>
+        <p>Columns: <span id="numCols">Loading...</span></p>
+        <p>Rows: <span id="numRows">Loading...</span></p>
+      </div>
+      <div id="example-table"></div>
+      <iframe src="https://web.archive.org/web/20230606050617/https://www.sec.gov/Archives/edgar/data/320193/000032019323000064/aapl-20230401.htm" frameborder="0"></iframe>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+
+        // dataset
+        const dfPromise = aq.loadArrow('https://gist.githubusercontent.com/TheNeuralBit/64d8cc13050c9b5743281dcf66059de5/raw/c146baf28a8e78cfe982c6ab5015207c4cbd84e3/scrabble.arrow');
+
+        // Asynch Programming pisses me off
+        Promise.all([dfPromise]).then(([data]) => {
+
+          // store data as df - current df we are working on, see other dfs in left side bar
+          // const df = data.objects();
+          let df = aq.table(data);
+
+          let steps = [];
+
+          let cols = aq.table(df).numCols();
+          let rows = aq.table(df).numRows();
+          let columns = aq.table(df).columnNames();
+
+          document.getElementById('numCols').textContent = cols.toLocaleString();
+          document.getElementById('numRows').textContent = rows.toLocaleString();
+
+          // Create a Handsontable instance
+          const hotElement = document.getElementById('example-table');
+          const hot = new Handsontable(hotElement, {
+            data: df.objects().slice(0,20),
+            colHeaders: columns,
+            rowHeaders: true,
+            licenseKey: 'non-commercial-and-evaluation',
+            height: '85vh',
+            afterOnCellMouseDown: function (event, coords, TD) {
+              if (coords.col !== null) {
+                const selectedHeader = hot.getColHeader(coords.col);
+                selectedColumnName = selectedHeader;
+                console.log('column selected: ' + selectedColumnName);
+              }
+            },
+            dropdownMenu: {
+              items: {
+                'rename': {
+                  name: 'Rename'
+                },
+                'select': {
+                  name: 'Select (Remove) Columns'
+                },
+                'reorder': {
+                  name: 'Reorder Columns',
+                  submenu: {
+                    items: [
+                      {
+                        key: 'reorder:asc',
+                        name: 'Ascending Order',
+                        callback: function (key, options) {
+                          console.log('Ascending Order')
+                        }
+                      },
+                      {
+                        key: 'reorder:desc',
+                        name: 'Descending Order',
+                        callback: function (key, options) {
+                          console.log('Descending Order')
+                        }
+                      },
+                      {
+                        key: 'reorder:maual',
+                        name: 'Manual Order',
+                        callback: function (key, options) {
+                          console.log('Manual Order')
+                        }
+                      },
+                    ]
+                  }
+                },
+                'h1': {
+                  name: '---------'
+                },
+                'filter': {
+                  name: 'Filter',
+                  submenu: {
+                    items: [
+                      {
+                        key: 'filter:isequalto',
+                        name: 'Is Equal To',
+                        callback: function (key, options) {
+                          console.log('Is Equal To')
+                        }
+                      },
+                      {
+                        key: 'reorder:isnotequalto',
+                        name: 'Is Not Equal To',
+                        callback: function (key, options) {
+                          console.log('Is Not Equal To')
+                        }
+                      },
+                      {
+                        key: 'reorder:isin',
+                        name: 'Is In (Multiple Values)',
+                        callback: function (key, options) {
+                          console.log('Is In (Multiple Values)')
+                        }
+                      },
+                      {
+                        key: 'reorder:isnotin',
+                        name: 'Is In Not (Multiple Values)',
+                        callback: function (key, options) {
+                          console.log('Is In Not (Multiple Values)')
+                        }
+                      },
+                      {
+                        key: 'reorder:contains',
+                        name: 'Contains',
+                        callback: function (key, options) {
+                          console.log('Contains')
+                        }
+                      },
+                      {
+                        key: 'reorder:notcontains',
+                        name: 'Does Not Contain',
+                        callback: function (key, options) {
+                          console.log('Does Not Contain')
+                        }
+                      },
+                      {
+                        key: 'reorder:notcontains',
+                        name: 'Does Not Contain',
+                        callback: function (key, options) {
+                          console.log('Does Not Contain')
+                        }
+                      },
+                    ]
+                  }
+                },
+                'groupby': {
+                  name: 'Group By'
+                },
+                'summarize': {
+                  name: 'Summarize (Aggregate)'
+                },
+                'calc': {
+                  name: 'Create Calculation'
+                },
+                'windowcalc': {
+                  name: 'Create Window Calculation'
+                },
+                'arrange': {
+                  name: 'Arrange (Sort)'
+                },
+                'h2': {
+                  name: '---------'
+                },
+                'join': {
+                  name: 'Join with DF'
+                },
+                'append': {
+                  name: 'Append (Add Rows / Union)'
+                },
+                'pivotlonger': {
+                  name: 'Pivot Longer (Wide to Long)'
+                },
+                'pivotwider': {
+                  name: 'Pivot Wider (Long to Wide)'
+                },
+                'separate': {
+                  name: 'Separate (Text to Columns)'
+                },
+                'cross': {
+                  name: 'Crossing (Cartesian Product)'
+                },
+                'h3': {
+                  name: '---------'
+                },
+                'change': {
+                  name: 'Change Data Type'
+                },
+                'replace': {
+                  name: 'Replace Values'
+                },
+                'text': {
+                  name: 'Text Data'
+                },
+                'missing': {
+                  name: 'Missing Data'
+                },
+              }
+          },
+          });
+        }).catch(error => {
+          console.error('Error loading data:', error);
+        });
+
+
+    </script>
+</body>
+
+<!-- dropdownMenu: [
+'Rename',
+'Select (Remove) Columns',
+'Reorder Columns',
+'---------',
+'Filter',
+'Group By',
+'Summarize (Aggregate)',
+'Create Calculation',
+'Create Window Calculation',
+'Arrange (Sort)',
+'---------',
+'Join (Add Columns)',
+'Append (Add Rows / Union)',
+'Pivot Longer (Wide to Long)',
+'Pivot Wider (Long to Wide)',
+'Separate',
+'Cross (Cartesian Product)',
+'---------',
+'Change Data Type'
+], -->
+</html>
+
+
