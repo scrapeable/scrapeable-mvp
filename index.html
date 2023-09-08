@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="dist/img/icons8-s-67.png">
+  <title>SCRAPEABLE</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+
+  <!-- jQuery -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4 -->
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="dist/js/adminlte.min.js"></script>
+  <!-- tradingview -->
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <!-- Selectize Links -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.default.css" integrity="sha512-J0JTRxsBEJ99DP4GamwciDi8VjALSrZneBYrv98BhqHPvlQP6gLbmmuddlYXHDB8hyLtefOIJFlpZBhksCtK8g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js" integrity="sha512-pF+DNRwavWMukUv/LyzDyDMn8U2uvqYQdJN0Zvilr6DDo/56xPDZdDoyPDYZRSL4aOKO/FGKXTpzDyQJ8je8Qw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.bootstrap4.min.css" integrity="sha512-MMojOrCQrqLg4Iarid2YMYyZ7pzjPeXKRvhW9nZqLo6kPBBTuvNET9DBVWptAo/Q20Fy11EIHM5ig4WlIrJfQw==" crossorigin="anonymous" referrerpolicy="no-referrer" /> 
+  <!-- font awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    .selectize-dropdown .option {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 10px;
+      
+    }
+    .selectize-dropdown .column-l {
+      flex: 1;
+      text-align: left;
+      width: 40;
+    }
+    .selectize-dropdown .column-r {
+      flex: 1;
+      text-align: left;
+      width: 20%;
+    }
+    .selectize-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px;
+      background-color: #eee;
+      font-weight: bold;
+    }
+    .selectize-dropdown-content {
+      max-height: 500px !important; /* Change this value to adjust the height of the menu */
+    }
+    .iframe-container {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      height: 100vh;
+    }
+    #quicksight-frame {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      width: 100%; 
+      height: calc(100vh - 50px);
+      border: none;
+    }
+    #shiny-frame {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      width: 100%; 
+      height: calc(100vh - 50px);
+      border: none;
+    }
+    #tradingview-widget{
+      height: calc(100vh - 50px);
+    }
+  </style>
+
+</head>
+<body class="hold-transition sidebar-mini sidebar-collapse" style="overflow: hidden !important;">
+<!-- Site wrapper -->
+<div class="wrapper">
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light" style="height: 55px;">
+    <div class="input-group mb-3" style="padding-top: 14px;">
+      <select id="selectize" placeholder="(this app is still under development) Start typing a symbol, economic code, politician name, dataset......" class="form-control" autocapitalize="on" autocomplete="off" autocorrect="off" role="combobox" spellcheck="false"  type="search"></select>
+      <button id="signin-signup" type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default">
+        Sign In / Sign Up
+      </button>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+            <i class="fas fa-expand-arrows-alt"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- /.navbar -->
+
+  <div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="card-header p-0 pt-1">
+          <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="custom-tabs-one-signin-tab" data-toggle="pill" href="#custom-tabs-one-signin" role="tab" aria-controls="custom-tabs-one-signin" aria-selected="true">Sign In</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="custom-tabs-one-signup-tab" data-toggle="pill" href="#custom-tabs-one-signup" role="tab" aria-controls="custom-tabs-one-signup" aria-selected="false">Sign Up</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="custom-tabs-one-other-tab" data-toggle="pill" href="#custom-tabs-one-other" role="tab" aria-controls="custom-tabs-one-other" aria-selected="false">Help</a>
+            </li>
+          </ul>
+        </div>
+        <div class="card-body">
+          <div class="tab-content" id="custom-tabs-one-tabContent">
+            <div class="tab-pane fade show active" id="custom-tabs-one-signin" role="tabpanel" aria-labelledby="custom-tabs-one-signin-tab">
+               Options to allow the user to sign in to their existing account
+            </div>
+            <div class="tab-pane fade" id="custom-tabs-one-signup" role="tabpanel" aria-labelledby="custom-tabs-one-signup-tab">
+              Options to allow the user to sign up and create a new account
+            </div>
+            <div class="tab-pane fade" id="custom-tabs-one-other" role="tabpanel" aria-labelledby="custom-tabs-one-other-tab">
+              Something else? Issues with your account? Want to cancel your account?
+            </div>
+          </div>
+        </div>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="#" class="brand-link">
+      <img src="../../dist/img/icons8-s-67.png" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light"><b>SCRAPEABLE</b></span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-header">Get Started</li>
+          <li class="nav-item">
+            <a href="https://us-east-2.quicksight.aws.amazon.com/sn/folders/personal/a625931d-8348-4588-aed9-31ff55064a7e" class="nav-link">
+              <i class="nav-icon fas fa-chart-pie"></i>
+              <p>
+                Build
+                <span class="right badge badge-primary">Author Only</span>
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-comments"></i>
+              <p>
+                Help
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Contact
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Slack
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Autofill
+                    <span class="right badge badge-danger">Bug - Solution</span>
+                  </p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-header">Dashboards</li>
+         </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper" style="overflow-y: hidden !important; overflow-x: hidden !important;">
+
+    <!-- container for web app -->
+    <div class="iframe-container" id="container-viz-frame">
+       <!-- iframe content of app appended here -->
+    </div>
+
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<script>
+
+// selectize search
+$(document).ready(function() {
+    
+    // replace wtih search engine URL
+    $.getJSON("https://raw.githubusercontent.com/scrapeable/scrapeable-mvp/main/index.json", function(data) {
+        
+        // parse options
+        // var options = JSON.parse(data).map(function(item) {
+        //     return { 
+        //         id: item.id, 
+        //         id_name: item.id_name,
+        //         dataset_short_name: item.dataset_short_name, 
+        //         dataset_long_name: item.dataset_long_name, 
+        //         visual_short_name: item.visual_short_name, 
+        //         visual_long_name: item.visual_long_name, 
+        //         value: item.value,
+        //         command: item.command
+        //     };
+        // });
+
+        var options = [
+            // use this
+            {id: 'AAPL', id_name: 'Apple Inc.', dataset_short_name: 'TV', dataset_long_name: 'TRADING VIEW', visual_short_name: 'C', visual_long_name: 'CHART', value: 'NASDAQ:AAPL', command: 'AAPL TV C'},
+            {id: 'AAPL', id_name: 'Apple Inc.', dataset_short_name: 'FA', dataset_long_name: 'FINANCIAL ANALYSIS', visual_short_name: 'D', visual_long_name: 'DASHBOARD', value: 'https://us-east-2.quicksight.aws.amazon.com/sn/embed/share/accounts/498443533345/dashboards/30c8b96b-30e3-41ee-9087-6a7d94a390d8#p.pubID=AAPL', command: 'AAPL FA D'},
+            {id: 'AAPL', id_name: 'Apple Inc.', dataset_short_name: 'FM', dataset_long_name: 'FINANCIAL MODEL', visual_short_name: 'X', visual_long_name: 'EXCEL', value: 'https://netorgft14319115-my.sharepoint.com/personal/sean_scrapeable_com/_layouts/15/Doc.aspx?sourcedoc=%7B337C904C-99F3-45CE-A14B-AD73F7AC3DC1%7D&action=embedview&AllowTyping=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True', command: 'AAPL FM V'},
+            {id: 'AAPL', id_name: 'Apple Inc.', dataset_short_name: 'FR Q1FY22', dataset_long_name: 'FINANCIAL REPORT', visual_short_name: 'V', visual_long_name: 'VIEW', value: 'https://scrapeable.nyc3.digitaloceanspaces.com/public/0000240acdd3bb7d776ccdbc7699552c.htm', command: 'AAPL FR V-Q3FY22 (2022-01-01)'},
+            {id: 'AAPL', id_name: 'Apple Inc.', dataset_short_name: 'HS', dataset_long_name: 'HISTORICAL SERIES', visual_short_name: 'B', visual_long_name: 'BACKTEST', value: 'http://127.0.0.1:3690/?symbol=AAPL', command: 'AAPL HS B'},
+            {id: 'AAPL', id_name: 'Apple Inc.', dataset_short_name: 'CR', dataset_long_name: 'Company report', visual_short_name: 'V', visual_long_name: 'VIEW', value: 'https://clinicaltrials.gov/study/NCT05770895?spons=Gilead%20Sciences&rank=4', command: 'AAPL CR V'}
+        ]
+        
+        // selectize element
+        $("#selectize").selectize({
+            valueField: "value",
+            labelField: "command",
+            searchField: ["id", "id_name", "dataset_short_name", "dataset_long_name", "visual_short_name", "visual_long_name"],
+            maxOptions: 14,
+            maxItems: 1,
+            create: false,
+            options: options,
+            plugins: ["autofill_disable", "auto_select_on_type"],
+            render: {
+            option: 
+                function(item, escape) {
+
+                    return '<div class="option">' +
+                    '<div class="column-l">' + '<b>' + escape(item.id) + '</b>' + ' - ' + '<small>' + escape(item.id_name) + '</small>' + '</div>' +
+                    '<div class="column-l">' + '<b>' + escape(item.dataset_short_name) + '</b>' + ' - ' + '<small>' + escape(item.dataset_long_name) + '</small>' + '</div>' +
+                    '<div class="column-r">' + '<b>' + escape(item.visual_short_name) + '</b>' + ' - ' + '<small>' + escape(item.visual_long_name) + '</small>' + '</div>' + 
+                    '</div>';
+
+                }
+            },
+            onItemAdd: function(value) {
+
+                // grab rest of selected option, use for title with multiple tabs
+                var selectedOption = options.find(option => option.value === value);
+                var iframeContainer = document.getElementById('container-viz-frame');
+
+                console.log(value);
+
+                if (value.includes('us-east-2.quicksight.aws.amazon.com/sn/embed/share/accounts/498443533345')) {
+                    // quicksight iframe
+
+                    // clear container-viz-frame
+                    iframeContainer.innerHTML = '';
+                    // create iframe on the fly
+                    var iframe = document.createElement('iframe');
+                    iframeContainer.appendChild(iframe);
+                    iframe.id = 'quicksight-frame'; 
+                    // paste value and startDate if applicable 
+                    iframe.src = value 
+
+                }else if (value.includes('https://netorgft14319115-my.sharepoint.com')){
+                    // shinyapp iframe
+
+                    // clear container-viz-frame
+                    iframeContainer.innerHTML = ''; 
+                    // create iframe on the fly
+                    var iframe = document.createElement('iframe');
+                    iframeContainer.appendChild(iframe);
+                    iframe.id = 'shiny-frame'; 
+
+                    iframe.src = value;
+
+
+                }else if (value.includes('scrapeable.nyc3.digitaloceanspaces.com')){
+                    // sec.gov iframe
+
+                    // clear container-viz-frame
+                    iframeContainer.innerHTML = ''; 
+                    // create iframe on the fly
+                    var iframe = document.createElement('iframe');
+                    iframeContainer.appendChild(iframe);
+                    iframe.id = 'shiny-frame'; 
+                    // paste value and startDate if applicable 
+                    iframe.src = value
+
+                }else if (value.length < 37){
+                    // tradingview iframe
+
+                    // tradingview config
+                    var tvConfig = {
+                        "autosize": true,
+                        "symbol": value,
+                        "interval": "D",
+                        "timezone": "Etc/UTC",
+                        "theme": "light",
+                        "style": "1",
+                        "locale": "en",
+                        "enable_publishing": false,
+                        "container_id": "tradingview-widget"
+                    };
+                
+                    // trading view div html
+                    var tvHTML = `
+                        <div class="tradingview-widget-container">
+                            <div id="tradingview-widget"></div>
+                        </div>
+                    `;
+                
+                    // append iframe to container
+                    iframeContainer.innerHTML = tvHTML;
+                    new TradingView.widget(tvConfig);
+
+                }else if(value.includes('https://clinicaltrials.gov/study/')){
+
+                    const headers = new Headers({
+                        'User-Agent': 'sean@scrapeable.com'
+                    });
+
+                    var request = new Request(value, {
+                        method: 'GET',
+                        headers: headers
+                    })
+
+                    // clear container-viz-frame
+                    iframeContainer.innerHTML = ''; 
+                    // create iframe on the fly
+                    var iframe = document.createElement('iframe');
+                    iframeContainer.appendChild(iframe);
+                    iframe.id = 'shiny-frame'; 
+                    // paste value and startDate if applicable 
+                    fetch(request)
+                      .then(response => {
+                          if (!response.ok) {
+                              throw new Error(`HTTP error! Status: ${response.status}`);
+                          }
+                          return response.text(); // Convert the response to text
+                      })
+                      .then(data => {
+                          // Display the HTML content in the specified div
+                          iframe.contentDocument.write(data);
+                      })
+                      .catch(error => {
+                          console.error('Fetch error:', error);
+                      });
+
+
+                }else{
+
+                    console.log('Bad Value');
+
+                }
+
+            }
+
+        });
+
+    });
+
+});
+</script>
+
+</body>
+
+</html>
